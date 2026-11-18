@@ -37,5 +37,9 @@ foreach (Book book in books)
 ```text
 Name: Sense and Sensibility (1811)
 Content: ...
+```
+- Now the program works quite the same as our Dictionary version, right?
+- Functionally, yes. Let's however, consider the performance of the program. C#'s DateTime() has property Ticks, which represents the given date and time of a DateTime instance. A Tick is one hundred nanoseconds.
 
-``` 
+
+
