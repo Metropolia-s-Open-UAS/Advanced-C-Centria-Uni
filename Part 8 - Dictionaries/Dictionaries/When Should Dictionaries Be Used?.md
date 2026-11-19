@@ -40,6 +40,88 @@ Content: ...
 ```
 - Now the program works quite the same as our Dictionary version, right?
 - Functionally, yes. Let's however, consider the performance of the program. C#'s DateTime() has property Ticks, which represents the given date and time of a DateTime instance. A Tick is one hundred nanoseconds.
+```csharp
+List<Book> books = new List<Book>();
+
+// Add 10 million books to the list
+
+Book senseAndSensibility = new Book("Sense and Sensibility", 1811, "...");
+Book prideAndPrejudice = new Book("Pride and Prejudice", 1813, "....");
+books.Add(senseAndSensibility);
+books.Add(prideAndPrejudice);
+
+DateTime start = DateTime.Now;
+
+// searching for a book named Persuasion
+foreach (Book book in books)
+{
+  if (book.name == "Persuation")
+  {
+    Console.WriteLine(book);
+    break;
+  }
+}
+
+Console.WriteLine();
+
+// searching for a book named Sense and Sensibility
+foreach (Book book in books)
+{
+  if (book.name == "Sense and Sensibility")
+  {
+    Console.WriteLine(book);
+    break;
+  }
+}
+DateTime end = DateTime.Now;
+Console.WriteLine("Time elapsed: " + (end.Ticks - start.Ticks)/10000.0 + " milliseconds");
+```
+```text
+Name: Sense and Sensibility (1811)
+Content: ...
+Time elapsed: 390.5467 millisecond
+```
+> With 10 million (and 2) books, it takes almost half a second to find two books. Of course, the way in which the list is ordered has an effect. If the book being searched was first on the list, the program would be faster. On the other hand, if the book were not on the list, the program would have to go through all of the books in the list before determining that such book does not exist.
+- Let's consider the same program using a dictionary.
+```csharp
+Dictionary<string, Book> directory = new Dictionary<string, Book>();
+
+// Add 10 million books to the dictionary
+
+Book senseAndSensibility = new Book("Sense and Sensibility", 1811, "...");
+Book prideAndPredujice = new Book("Pride and Prejudice", 1813, "....");
+directory.Add(senseAndSensibility.name, senseAndSensibility);
+directory.Add(prideAndPredujice.name, prideAndPredujice);
+
+DateTime start = DateTime.Now;
+
+if (directory.ContainsKey("Persuation"))
+{
+  Console.WriteLine(directory["Persuasion"]);
+}
+else
+{
+  Console.WriteLine("Book not found!");
+}
+
+Console.WriteLine();
+if (directory.ContainsKey("Pride and Prejudice"))
+{
+  Console.WriteLine(directory["Pride and Prejudice"]);
+}
+
+DateTime end = DateTime.Now;
+Console.WriteLine("Time elapsed: " + (end.Ticks - start.Ticks)/10000.0 + " milliseconds");
+
+```
+```text
+Book not found!
+
+Name: Pride and Prejudice (1813)
+Content: ....
+Time elapsed: 5.8134 milliseconds
+```
+> As we can see, the dictionary is quite much faster, and that's with searching only for 2 books. What if we needed to search for 3? Or 100?
 
 
 
