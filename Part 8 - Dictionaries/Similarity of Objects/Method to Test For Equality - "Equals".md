@@ -64,7 +64,8 @@ public override bool Equals(object compared)
     Book comparedBook = (Book)compared;
 
     // if the values of the object variables are equal, the objects are, too
-    return this.name == comparedBook.name && this.published == comparedBook.published && this.content == comparedBook.content;
+    return this.name == comparedBook.name && this.published == comparedBook.published
+    && this.content == comparedBook.content;
   }
 }
 ```
