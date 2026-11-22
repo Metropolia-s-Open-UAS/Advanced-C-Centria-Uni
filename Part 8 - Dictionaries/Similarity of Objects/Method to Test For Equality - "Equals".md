@@ -69,6 +69,94 @@ public override bool Equals(object compared)
   }
 }
 ```
+The Book-class in it's entirety.
+```csharp
+namespace Exercise001
+{
+  public class Book
+  {
+    public string name { get; set; }
+    public string content { get; set; }
+    public int published { get; set; }
+
+    public Book(string name, int published, string content)
+    {
+      this.name = name;
+      this.published = published;
+      this.content = content;
+    }
+
+    public override string Tostring()
+    {
+      return "Name: " + this.name + " (" + this.published + ")\n"
+          + "Content: " + this.content;
+    }
+
+    public override bool Equals(object compared)
+    {
+      // if the variables are located in the same position, they are equal
+      if (this == compared)
+      {
+        return true;
+      }
+
+      // if the compared object is null or not of type Book, the objects are not equal
+      if ((compared == null) || !this.GetType().Equals(compared.GetType()))
+      {
+        return false;
+      }
+      else
+      {
+        // convert the object to a Book object
+        Book comparedBook = (Book)compared;
+
+        // if the values of the object variables are equal, the objects are, too
+        return this.name == comparedBook.name && this.published == comparedBook.published
+        && this.content == comparedBook.content;
+      }
+    }
+  }
+}
+```
+Now the book comparison returns true if the instance variables of the books are the same.
+```csharp
+Book bookObject = new Book("Book object", 2000, "...");
+Book anotherBookObject = new Book("Book object", 2000, "...");
+
+if (bookObject.Equals(anotherBookObject))
+{
+  Console.WriteLine("The books were the same");
+}
+else
+{
+  Console.WriteLine("The books weren't the same");
+}
+```
+```cmd
+Book.cs(3,16): warning CS0659: 'Book' overrides Object.Equals(object o) but does not override Object.GetHashCode() [/mnt/c/Users/HeikkiHei/Documents/coding-exercises/Exercise001/Exercise001.csproj
+The books were the same
+```
+- We also get the very familiar warning. Finally in this section, we will do something about it.
+> The List also uses the Equals method in its internal implementation. If we don't define the Equals method in our objects, the contains method of the List does not work properly. If you try out the code below with two Book classes, one with the Equals method defined, and another without it, you'll see the difference.
+```csharp
+List<Book> books = new List<Book>();
+Book bookObject = new Book("Book Object", 2000, "...");
+books.Add(bookObject);
+
+if (books.Contains(bookObject))
+{
+  Console.WriteLine("Book Object was found.");
+}
+
+bookObject = new Book("Book Object", 2000, "...");
+
+if (!books.Contains(bookObject))
+{
+  Console.WriteLine("Book Object was not found.");
+}
+```
+> This reliance on default methods such as Equals is actually the reason why C# demands that variables added to List and Dictionary are of reference type. Each reference type variable comes with default methods, such as Equals, which means that you don't need to change the internal implementation of the List class when adding variables of different types.
+
 
 
 
