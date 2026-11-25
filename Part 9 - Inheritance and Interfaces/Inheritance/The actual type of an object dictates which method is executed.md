@@ -114,5 +114,132 @@ namespace Exercise001
   }
 }
 ```
+- The Location method is not meant for external use, which is why it is defined as protected. Derived classes will still be able to access the method.
+- Manhattan distance means the distance between two points if you can only travel in the direction of the coordinate axes. It is used in many navigation algorithms, for example.
+> A colored point is otherwise identical to a point, but it contains also a color that expressed as a string. Due to the similarity, we can create a new class by extending the class Point.
+```csharp
+namespace Exercise001
+{
+  public class ColorPoint : Point
+  {
+
+    private string color;
+
+    public ColorPoint(int x, int y, string color) : base(x, y)
+    {
+      this.color = color;
+    }
+
+    public override string ToString()
+    {
+      return base.ToString() + " color: " + color;
+    }
+  }
+}
+```
+- The `class` defines an object variable in which we store the color. The coordinates are already defined in the base class. We want the string representation to be the same as with points, but to also include information about the color. The overriden ToString method calls the ToString method of the base class, and adds to it the color of the point.
+- Next we'll add a few points to a list. Some of them are "normal" while others are color points. At the end of the example we'll print the points on the list. For each point, the ToString to be executed is determined by the actual type of the point, even though the list knows all the points by the Point type.
+```csharp
+static void Main(string[] args)
+{
+  List<Point> points = new List<Point>();
+  points.Add(new Point(4, 8));
+  points.Add(new ColorPoint(1, 1, "green"));
+  points.Add(new ColorPoint(2, 5, "blue"));
+  points.Add(new Point(0, 0));
+
+  foreach (Point p in points)
+  {
+    Console.WriteLine(p);
+  }
+}
+```
+```text
+(4, 8) distance 12
+(1, 1) distance 2 color: green
+(2, 5) distance 7 color: blue
+(0, 0) distance 0
+```
+- We also want to include a three-dimensional point in our program. Since it has no color information, let's derive it from the class **Point**.
+```csharp
+namespace Exercise001
+{
+  using System;
+  public class Point3D : Point
+  {
+
+    private int z;
+
+    public Point3D(int x, int y, int z) : base(x, y)
+    {
+      this.z = z;
+    }
+    new protected string Location()
+    {
+      return base.Location() + ", " + z;    // the resulting string has the form "x, y, z"
+    }
+    new public int ManhattanDistanceFromOrigin()
+    {
+      // first ask the base for the distance based on x and y
+      // and add the effect of the z coordinate to that result
+      return base.ManhattanDistanceFromOrigin() + Math.Abs(z);
+    }
+
+    public override string ToString()
+    {
+      return "(" + this.Location() + ") distance " + this.ManhattanDistanceFromOrigin();
+    }
+  }
+}
+```
+> In our methods Location and ManhattanDistanceFromOrigin we use the keyword **new**, because we are overriding the methods from the **base** class. Without the keyword, we would get a warning.
+```csharp
+static void Main(string[] args)
+{
+  List<Point> points = new List<Point>();
+  points.Add(new Point(4, 8));
+  points.Add(new ColorPoint(1, 1, "green"));
+  points.Add(new ColorPoint(2, 5, "blue"));
+  points.Add(new Point3D(5, 2, 8));
+  points.Add(new Point(0, 0));
+
+  foreach (Point p in points)
+  {
+    Console.WriteLine(p);
+  }
+}
+```
+```text
+(4, 8) distance 12
+(1, 1) distance 2 color: green
+(2, 5) distance 7 color: blue
+(5, 2, 8) distance 15
+(0, 0) distance 0
+```
+- We notice that the `ToString` method in **Point3D** is exactly the same as the **ToString** of **Point**. Could we save some effort and not override ToString? The answer happens to be yes! The Point3D class is refined into this:
+```csharp
+namespace Exercise001
+{
+  using System;
+  public class Point3D : Point
+  {
+
+    private int z;
+
+    public Point3D(int x, int y, int z) : base(x, y)
+    {
+      this.z = z;
+    }
+    new protected string Location()
+    {
+      return base.Location() + ", " + z;    // the resulting string has the form "x, y, z"
+    }
+    new public int ManhattanDistanceFromOrigin()
+    {
+      return base.ManhattanDistanceFromOrigin() + Math.Abs(z);
+    }
+  }
+}
+```
 
 
