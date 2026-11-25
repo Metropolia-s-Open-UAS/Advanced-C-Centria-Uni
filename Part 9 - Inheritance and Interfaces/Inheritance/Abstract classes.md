@@ -53,5 +53,84 @@ namespace Exercise001
 - [ ] we can create a user `interface` by using Operation type `variables`
 - [ ]  Next we'll show the class **UserInterface** that contains a list of operations. It's possible to add operations to the **UI** dynamically.
 ```csharp
+namespace Exercise001
+{
+  using System;
+  using System.Collections.Generic;
+  public class UserInterface
+  {
 
+    private List<Operation> operations;
+
+    public UserInterface()
+    {
+      this.operations = new List<Operation>();
+    }
+
+    public void AddOperation(Operation operation)
+    {
+      this.operations.Add(operation);
+    }
+
+    public void Start()
+    {
+      while (true)
+      {
+        PrintOperations();
+        Console.WriteLine("Choice: ");
+
+        string choice = Console.ReadLine();
+        if (choice == "0")
+        {
+          break;
+        }
+
+        ExecuteOperation(choice);
+        Console.WriteLine();
+      }
+    }
+
+    private void PrintOperations()
+    {
+      Console.WriteLine("\t0: Stop");
+      int i = 0;
+      while (i < this.operations.Count)
+      {
+        string operationName = this.operations[i].name;
+        Console.WriteLine("\t" + (i + 1) + ": " + operationName);
+        i = i + 1;
+      }
+    }
+
+    private void ExecuteOperation(string choice)
+    {
+      int operation = Convert.ToInt32(choice);
+
+      Operation chosen = this.operations[operation -1];
+      chosen.Execute();
+    }
+  }
+}
 ```
+```csharp
+UserInterface userInterface = new UserInterface();
+userInterface.AddOperation(new PlusOperation());
+
+userInterface.Start();
+```
+```cmd
+0: Stop
+        1: PlusOperation
+Choice:
+> 1
+First number: 4
+Second number: 5
+The sum of the numbers is 9
+
+        0: Stop
+        1: PlusOperation
+Choice:
+> 0
+```
+> The greatest difference between `interfaces` and `abstract` classes is that `abstract` classes can contain object variables and constructors in addition to methods. Since you can also define functionality in abstract classes, you can use them to define e.g. default behavior. In the user interface above storing the name of the operation used the functionality defined in the abstract Operation class.
+
