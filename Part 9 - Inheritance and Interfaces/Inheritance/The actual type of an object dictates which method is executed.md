@@ -241,5 +241,19 @@ namespace Exercise001
   }
 }
 ```
+- What happens in detail when we call the `ToString` method of a **three-dimensional point**? The execution advances in the following manner.
+  1. Look for a definition of `ToString` in the class **Point3D**. It does not exist, so the base class is next to be examined.
+  2. Look for a definition of `ToString` in the base class **point**. It can be found, so the code inside the implementation of the method is executed
+    - so the exact code to be executed is return `"("+this.Location()+") distance " + this.ManhattanDistanceFromOrigin();`
+    - the method Location is executed first
+    - look for a definition of Location in the class `Point3D`. It can be found, so its code is executed.
+    - This location calls the Location of the base class to calculate the result
+    - next we look for a definition of **ManhattanDistanceFromOrigin** in the **Point3D** class. It's found and its code is then executed
+    - Again, the method calls the similarly named method of the base class during its execution
+> As we can see, the sequence of events caused by the method call has multiple steps. The principle, however, is clear: The definition for the method is first searched for in the class definition of the actual type of the object. If it is not found, we next examine the base class. If the definition cannot be found there, either, we move on to the base class of this base class, etc...
+
+
+
+
 
 
